@@ -27,7 +27,7 @@ const customFetchBase: BaseQueryFn<
   if ((result.error?.data as any)?.message === 'You are not logged in') {
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
-
+      console.log(">>>> refreshResult")
       try {
         const refreshResult = await baseQuery(
           { credentials: 'include', url: 'auth/refresh' },

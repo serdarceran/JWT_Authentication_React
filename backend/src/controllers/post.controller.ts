@@ -8,6 +8,7 @@ import {
 import {
   createPost,
   findAllPosts,
+  findAllPostsBy,
   findAndUpdatePost,
   findOneAndDelete,
   findPost,
@@ -23,6 +24,7 @@ export const createPostHandler = async (
 ) => {
   try {
     const user_id = res.locals.user._id;
+    console.log('>>>>> userid:', user_id)
 
     const post = await createPost({ input: req.body, user_id });
 
@@ -72,8 +74,12 @@ export const getPostsHandler = async (
   next: NextFunction
 ) => {
   try {
-    const posts = await findAllPosts();
+    const user_id = res.locals.user._id;
+    
+    // const posts2 = await findAllPosts();
+    const posts =await findAllPostsBy({user:{ _id: user_id} },{limit: 10})
 
+    // console.log(">>> Getting posts", user_id.toString(), posts2)
     res.status(200).json({
       status: "success",
       data: {

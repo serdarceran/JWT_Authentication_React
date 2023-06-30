@@ -51,10 +51,14 @@ export const signToken = async (user: DocumentType<User>) => {
     expiresIn: `${config.get<number>("refreshTokenExpiresIn")}m`,
   });
 
+  console.log(">>>>", user.id)
+
   // Create a Session
   redisClient.set(user.id, JSON.stringify(user), {
-    EX: 60 * 60,
+    EX: 60 * 6000,
   });
+
+  console.log("at>>>", access_token);
 
   // Return access token
   return { access_token, refresh_token };

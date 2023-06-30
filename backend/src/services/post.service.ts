@@ -19,6 +19,13 @@ export const findAllPosts = async () => {
   return postModel.find().populate("user");
 };
 
+export const findAllPostsBy = async (
+  query: FilterQuery<Post>,
+  options: QueryOptions = {}
+) => {
+  return postModel.find(query, {}, options).populate("user");
+};
+
 export const findPost = async (
   query: FilterQuery<Post>,
   options: QueryOptions = {}

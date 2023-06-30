@@ -125,6 +125,8 @@ export const loginHandler = async (
     }
 
     // Create the Access and refresh Tokens
+    user.id = user._id.toString();
+    console.log(">>>44", user.id)
     const { access_token, refresh_token } = await signToken(user);
 
     // Send Access Token in Cookie
@@ -190,12 +192,15 @@ export const refreshAccessTokenHandler = async (
   try {
     // Get the refresh token from cookie
     const refresh_token = req.cookies.refresh_token as string;
-
+    
+    console.log('>>>refreshAccessTokenHandler - refresh_token ', refresh_token)
     // Validate the Refresh token
     const decoded = verifyJwt<{ sub: string }>(
       refresh_token,
       "refreshTokenPublicKey"
     );
+
+    console.log('>>>refreshAccessTokenHandler - decoded',  decoded)
 
     const message = "Could not refresh access token";
     if (!decoded) {
@@ -204,13 +209,16 @@ export const refreshAccessTokenHandler = async (
 
     // Check if the user has a valid session
     const session = await redisClient.get(decoded.sub);
+
+    console.log('>>>refreshAccessTokenHandler - session',  decoded.sub, session)
     if (!session) {
       return next(new AppError(message, 403));
     }
 
     // Check if the user exist
     const user = await findUserById(JSON.parse(session).id);
-
+    user.id = user._id.toString()
+    console.log('>>>refreshAccessTokenHandler - findUserById', JSON.parse(session).id, user)
     if (!user) {
       return next(new AppError(message, 403));
     }
@@ -244,7 +252,8 @@ export const logoutHandler = async (
 ) => {
   try {
     const user = res.locals.user;
-    await redisClient.del(user.id);
+    console.log('logout>>', res.locals)
+    await redisClient.del(user._id.toString());
     logout(res);
     res.status(200).json({ status: "success" });
   } catch (err: any) {
@@ -284,6 +293,7 @@ export const googleOauthHandler = async (
     const user = await findAndUpdateUser(
       { email },
       {
+        
         name,
         photo: picture,
         email,
@@ -297,6 +307,8 @@ export const googleOauthHandler = async (
       return res.redirect(`${config.get<string>("origin")}/oauth/error`);
 
     // Create access and refresh token
+    user.id = user._id.toString()
+    console.log(">>>44", user.id)
     const { access_token: accessToken, refresh_token } = await signToken(user);
 
     // Send cookie
@@ -356,6 +368,7 @@ export const githubOauthHandler = async (
     }
 
     // Create access and refresh tokens
+    // user.id = user._id;
     const { access_token: accessToken, refresh_token } = await signToken(user);
 
     res.cookie("access_token", accessToken, accessTokenCookieOptions);
