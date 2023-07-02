@@ -78,6 +78,7 @@ export const registerHandler = async (
         message:
           "An email with a verification code has been sent to your email",
       });
+      console.log(`verification code has been sent to ${user.email} with code ${verificationCode}`)
     } catch (error) {
       user.verificationCode = null;
       await user.save({ validateBeforeSave: false });
