@@ -6,7 +6,7 @@ import { IUser } from "./types";
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: customFetchBase,
-  tagTypes: ["User"],
+  tagTypes: ["User", "Users"],
   endpoints: (builder) => ({
     getMe: builder.query<IUser, null>({
       query() {
@@ -24,5 +24,29 @@ export const userApi = createApi({
         } catch (error) {}
       },
     }),
+    getAllUsers: builder.query<IUser[], void>({
+      query() {
+        return {
+          url: `/users`,
+          credentials: 'include',
+        };
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({
+                type: 'Users' as const,
+                id,
+              })),
+              { type: 'Users', id: 'LIST' },
+            ]
+          : [{ type: 'Users', id: 'LIST' }],
+      transformResponse: (results: { data: { users: IUser[] } }) =>
+        results.data.users,
+    })
   }),
 });
+
+export const {
+  useGetAllUsersQuery,
+} = userApi;
