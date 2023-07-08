@@ -22,7 +22,7 @@ export const deserializeUser = async (
     }
 
     if (!access_token) {
-      return next(new AppError("You are not logged in", 401));
+      return next();
     }
 
     // Validate Access Token
@@ -32,21 +32,21 @@ export const deserializeUser = async (
     );
 
     if (!decoded) {
-      return next(new AppError(`Invalid token or user doesn't exist`, 401));
+      return next();
     }
 
     // Check if user has a valid session
     const session = await redisClient.get(decoded.sub);
 
     if (!session) {
-      return next(new AppError(`User session has expired`, 401));
+      return next();
     }
 
     // Check if user still exist
     const user = await findUserById(JSON.parse(session).id);
 
     if (!user) {
-      return next(new AppError(`User with that token no longer exist`, 401));
+      return next();
     }
 
     // This is really important (Helps us know if the user is logged in from other controllers)

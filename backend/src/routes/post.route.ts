@@ -16,22 +16,18 @@ import {
   getPostSchema,
   updatePostSchema,
 } from "../schema/post.schema";
-import { uploadPostImageDisk } from "../upload/single-upload-disk";
 import {
   resizePostImage,
   uploadPostImage,
 } from "../upload/single-upload-sharp";
-import {
-  resizePostImages,
-  uploadPostImages,
-} from "../upload/multi-upload-sharp";
 
 const router = express.Router();
 
-router.use(deserializeUser, requireUser);
+router.use(deserializeUser);
 router
   .route("/")
   .post(
+    requireUser,
     uploadPostImage,
     resizePostImage,
     parsePostFormData,
@@ -44,12 +40,16 @@ router
   .route("/:postId")
   .get(validate(getPostSchema), getPostHandler)
   .patch(
+    requireUser,
     uploadPostImage,
     resizePostImage,
     parsePostFormData,
     validate(updatePostSchema),
     updatePostHandler
   )
-  .delete(validate(deletePostSchema), deletePostHandler);
+  .delete(
+    requireUser, 
+    validate(deletePostSchema), 
+    deletePostHandler);
 
 export default router;

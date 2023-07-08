@@ -74,10 +74,13 @@ export const getPostsHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user_id = res.locals.user._id;
-    
-    // const posts2 = await findAllPosts();
-    const posts =await findAllPostsBy({user:{ _id: user_id} },{limit: 10})
+    const user_id = res.locals.user?._id;
+    let posts;
+    if(user_id == null) {
+      posts = await findAllPosts();
+    } else {
+      posts =await findAllPostsBy({user:{ _id: user_id} },{limit: 10})
+    }
 
     // console.log(">>> Getting posts", user_id.toString(), posts2)
     res.status(200).json({

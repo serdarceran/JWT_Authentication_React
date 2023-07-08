@@ -4,10 +4,10 @@ import { toast } from 'react-toastify';
 import FullScreenLoader from '../components/FullScreenLoader';
 import Message from '../components/Message';
 import PostItem from '../components/post/post.component';
-import { useGetAllPostsQuery } from '../redux/api/postApi';
+import { useGetAllPublishedPostsQuery } from '../redux/api/postApi';
 
 const MainPage = () => {
-  const { isLoading, isError, error, data: posts } = useGetAllPostsQuery();
+  const { isLoading, isError, error, data: posts } = useGetAllPublishedPostsQuery();
 
   useEffect(() => {
     if (isError) {

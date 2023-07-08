@@ -70,6 +70,25 @@ export const postApi = createApi({
       transformResponse: (results: { data: { posts: IPostResponse[] } }) =>
         results.data.posts,
     }),
+    getAllPublishedPosts: builder.query<IPostResponse[], void>({
+      query() {
+        return {
+          url: `/posts`
+        };
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({
+                type: 'Posts' as const,
+                id,
+              })),
+              { type: 'Posts', id: 'LIST' },
+            ]
+          : [{ type: 'Posts', id: 'LIST' }],
+      transformResponse: (results: { data: { posts: IPostResponse[] } }) =>
+        results.data.posts,
+    }),
     deletePost: builder.mutation<IPostResponse, string>({
       query(id) {
         return {
@@ -88,4 +107,5 @@ export const {
   useDeletePostMutation,
   useUpdatePostMutation,
   useGetAllPostsQuery,
+  useGetAllPublishedPostsQuery
 } = postApi;

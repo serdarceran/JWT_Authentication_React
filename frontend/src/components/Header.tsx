@@ -97,7 +97,13 @@ const Header = () => {
                   Admin
                 </LoadingButton>
               )}
-              <LoadingButton onClick={() => setOpenPostModal(true)}>
+              <LoadingButton onClick={() => {
+                if (user) {
+                  setOpenPostModal(true);
+                } else {
+                  navigate('/login')
+                }
+                }}>
                 Create Post
               </LoadingButton>
               {user && (
