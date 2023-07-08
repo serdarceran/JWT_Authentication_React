@@ -107,7 +107,7 @@ const LoginPage = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
+        // height: '100vh',
         backgroundColor: '#2363eb',
       }}
     >
@@ -119,6 +119,7 @@ const LoginPage = () => {
           flexDirection: 'column',
         }}
       >
+        
         <Typography
           textAlign='center'
           component='h1'
@@ -131,7 +132,11 @@ const LoginPage = () => {
           }}
         >
           Welcome Back!
+          
         </Typography>
+        <LinkItem to='/' style={{ color: 'red' }}>
+                Show Home
+              </LinkItem>
         <Typography
           variant='body1'
           component='h2'

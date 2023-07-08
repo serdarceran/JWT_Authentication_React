@@ -16,6 +16,7 @@ export const userSlice = createSlice({
     logout: () => initialState,
     setUser: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
+      console.log('>>>> USer is set ' + state.user.email)
     },
   },
 });

@@ -13,6 +13,7 @@ import AdminPage from './pages/admin.page';
 import EmailVerificationPage from './pages/verifyemail.page';
 import ResetPasswordPage from './pages/reset-password.page';
 import ForgotPasswordPage from './pages/forgot-password.page';
+import MainPage from './pages/main.page';
 
 function App() {
   return (
@@ -21,11 +22,14 @@ function App() {
       <ToastContainer />
       <Routes>
         <Route path='/' element={<Layout />}>
-          <Route index element={<HomePage />} />
+          <Route index element={<MainPage />} />
 
           {/* Private Route */}
           <Route element={<RequireUser allowedRoles={['user', 'admin']} />}>
             <Route path='profile' element={<ProfilePage />} />
+          </Route>
+          <Route element={<RequireUser allowedRoles={['user', 'admin']} />}>
+            <Route path='myposts' element={<HomePage />} />
           </Route>
           <Route element={<RequireUser allowedRoles={['admin']} />}>
             <Route path='admin' element={<AdminPage />} />

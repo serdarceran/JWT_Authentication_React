@@ -54,6 +54,10 @@ const Header = () => {
     logoutUser();
   };
 
+  const setShowPosts = async () => {
+    window.location.href = '/myposts';
+  };
+
   return (
     <>
       <AppBar position='static' sx={{ backgroundColor: '#fff' }}>
@@ -96,6 +100,11 @@ const Header = () => {
               <LoadingButton onClick={() => setOpenPostModal(true)}>
                 Create Post
               </LoadingButton>
+              {user && (
+                <LoadingButton onClick={setShowPosts} loading={isLoading}>
+                  Show My Posts
+                </LoadingButton>
+              )}
             </Box>
           </Toolbar>
         </Container>
